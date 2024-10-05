@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "motor-app",
+    "slug": "motor-app",
+    "scheme": "motorApp",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "android": {
+      "package": "com.deepan.motorapp"
+    },
+    "build:android": "cd android && ./gradlew assembleRelease",
+    "ios": {
+      "bundleIdentifier": "com.deepan.motorapp"
+    },
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "userInterfaceStyle": "automatic",
+    "web": {
+      "favicon": "./assets/images/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a1784cd4-a0ce-4ffa-aa8c-3e785f08075f"
+      }
+    }
+  }
+}
