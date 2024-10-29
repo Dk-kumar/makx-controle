@@ -17,15 +17,15 @@
       "bundleIdentifier": "com.deepan.motorapp"
     },
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "userInterfaceStyle": "automatic",
     "web": {
-      "favicon": "./assets/images/favicon.png"
+      "favicon": ""
     },
     "extra": {
       "eas": {
