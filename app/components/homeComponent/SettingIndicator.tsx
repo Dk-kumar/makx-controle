@@ -62,8 +62,8 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 7,
-    marginTop: 5,
+    // padding: 7,
+    // marginTop: 5,
     position: 'relative',
     zIndex: 100
   },

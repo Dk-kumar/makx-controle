@@ -1,8 +1,8 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import routes from './routerConfiguration';
-import TopBackButton from '@/components/button/DefaultBack';
-import { TopRightHeader } from '@/components/TopRightHeader';
+import TopBackButton from '@/app/components/button/DefaultBack';
+import { TopRightHeader } from '@/app/components/TopRightHeader';
 
 const Stack = createStackNavigator();
 

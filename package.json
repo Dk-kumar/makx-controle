@@ -17,6 +17,7 @@
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
     "@react-native-firebase/app": "^20.5.0",
+    "@react-native-firebase/database": "^21.0.0",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/stack": "^6.4.1",
     "date-fns": "^3.6.0",
@@ -30,7 +31,7 @@
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.6",
     "expo-web-browser": "~13.0.3",
-    "firebase": "^10.13.2",
+    "firebase": "^10.14.1",
     "install": "^0.13.0",
     "metro-config": "^0.80.9",
     "npm": "^10.8.2",

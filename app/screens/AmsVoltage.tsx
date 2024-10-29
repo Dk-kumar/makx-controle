@@ -1,9 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { View, Text, TextInput, StyleSheet, Button } from "react-native";
-import { SettingIndicator } from "@/components/homeComponent";
-import ToggleSwitch from "@/components/button/ToggleSwitch";
-import { db } from '../../config';
-import { set, ref } from 'firebase/database';
+import { SettingIndicator } from "@/app/components/homeComponent";
+import ToggleSwitch from "@/app/components/button/ToggleSwitch";
+
+import detailsContext from '@/app/hooks/FirebaseContext';
+import { updateData } from "../utils/service";
+
+
+const initializeFormData = (motorData: any) => ({
+  dryRun: {
+    tripTime: motorData.dryRun.tripTime,
+    L1: { threeP: motorData.dryRun.L1.threeP, oneP: motorData.dryRun.L1.oneP },
+    L2: { threeP: motorData.dryRun.L2.threeP, oneP: motorData.dryRun.L2.oneP },
+  },
+  overload: {
+    tripTime: motorData.overload.tripTime,
+    L1: { threeP: motorData.overload.L1.threeP, oneP: motorData.overload.L1.oneP },
+    L2: { threeP: motorData.overload.L2.threeP, oneP: motorData.overload.L2.oneP },
+  },
+  lowVolt: {
+    tripTime: motorData.lowVolt.tripTime,
+    L1: { threeP: motorData.lowVolt.L1.threeP, oneP: motorData.lowVolt.L1.oneP },
+  },
+  highVolt: {
+    tripTime: motorData.highVolt.tripTime,
+    L1: { threeP: motorData.highVolt.L1.threeP, oneP: motorData.highVolt.L1.oneP },
+  },
+  spp: {
+    tripTime: motorData.spp.tripTime,
+    volt:  motorData.spp.volt,
+  },
+});
+
 
 // Reusable InputField component
 const InputField = ({ label, value, unit, onChange }: any) => (
@@ -22,31 +50,16 @@ const InputField = ({ label, value, unit, onChange }: any) => (
 );
 
 export const AmsVoltage: React.FC = () => {
-  // Initial state with L1 and L2 values separated
-  const [formData, setFormData] = useState<any>({
-    dryRun: {
-      tripTime: "",
-      L1: { threeP: "", oneP: "" },
-      L2: { threeP: "", oneP: "" },
-    },
-    overload: {
-      tripTime: "",
-      L1: { threeP: "", oneP: "" },
-      L2: { threeP: "", oneP: "" },
-    },
-    lowVolt: {
-      tripTime: "",
-      L1: { threeP: "", oneP: "" },
-    },
-    highVolt: {
-      tripTime: "",
-      L1: { threeP: "", oneP: "" },
-    },
-    spp: {
-      tripTime: "",
-      volt: "",
-    },
-  });
+
+  const { motorData: {'amps&volts' : ams_voltage = {}} = { } } = useContext(detailsContext);
+  const [isDirty, setIsDirty] = useState(false);
+  const [formData, setFormData] = useState<any>(() => initializeFormData(ams_voltage));
+
+  useEffect(() => {
+    if (ams_voltage.dryRun) {
+        setFormData(initializeFormData(ams_voltage));
+    }
+}, [ams_voltage]);
 
   // Handle input changes dynamically
   const handleChange = (section: any, key: any, value: any) => {
@@ -57,14 +70,21 @@ export const AmsVoltage: React.FC = () => {
         [key]: value,
       },
     }));
-    console.log(formData);
+
+    setIsDirty(true);
+
   };
 
-  const hanldeSubmit = () => {
-    set(ref(db, 'post/' + 'ams'), {
-      data: formData
-    })
-  }
+  const handleSave = () => {
+    const amsObj = {
+      motorId: "qJzAIcv03PyaWqxRgO4mSU3l",
+      'amps&volts': formData,
+    };
+
+    updateData(amsObj);
+
+    setIsDirty(false);
+  };
 
   return (
     <View style={styles.container}>
@@ -331,7 +351,7 @@ export const AmsVoltage: React.FC = () => {
       </Section>
       <Button
         title="Save"
-        onPress={hanldeSubmit}
+        onPress={handleSave} disabled={!isDirty} 
       />
     </View>
   );

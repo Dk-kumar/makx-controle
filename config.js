@@ -1,23 +1,20 @@
 
-import firebase from 'firebase/compat/app'
-import { getDatabase } from 'firebase/database'
-
+import { initializeApp } from 'firebase/app';
+import { getDatabase } from 'firebase/database';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAPthHYQzMHn_dZhreF4b-20eiaudQVWsY",
-  authDomain: "makx-control.firebaseapp.com",
-  projectId: "makx-control",
-  storageBucket: "makx-control.appspot.com",
-  messagingSenderId: "669172052121",
-  appId: "1:669172052121:web:15960c0b72e3a2be694808",
-  measurementId: "G-010300BWCZ"
+  apiKey: "AIzaSyDewphss3NQ841rDIkacg2kXgITzInJN2A",
+  authDomain: "maxcontroller-6b85d.firebaseapp.com",
+  databaseURL: "https://maxcontroller-6b85d-default-rtdb.firebaseio.com",
+  projectId: "maxcontroller-6b85d",
+  storageBucket: "maxcontroller-6b85d.appspot.com",
+  messagingSenderId: "1052020300473",
+  appId: "1:1052020300473:web:28ace2f20b8f73a9ce1968",
+  measurementId: "G-NJYYHDFMCT"
 };
 
-// Initialize Firebase
-if(firebase.apps.length === 0) {
-   firebase.initializeApp(firebaseConfig);
-}
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
 
-const db = getDatabase()
 
-export {db}
+export { database };
