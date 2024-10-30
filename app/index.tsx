@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer} from '@react-navigation/native';
 import RouterConfig from "./router/RouterConfig";
-import { View } from 'react-native';
 import PageNameContext from '@/app/hooks/FirebaseContext';
 import { database } from '../config'
-import { ref, get, onValue } from 'firebase/database';
+import { ref, onValue } from 'firebase/database';
 
 export default function Index(){
 
@@ -18,7 +17,7 @@ export default function Index(){
   useEffect(() => {
     const dbRef = ref(database, 'users/E2O8uA4w3UHWI4S3hgeZ');
     const dbMotorsRef = ref(database, 'motors/qJzAIcv03PyaWqxRgO4mSU3l');
-  debugger
+  
     const unsubscribeUser = onValue(dbRef, (snapshot) => {
       if (snapshot.exists()) {
         setUserData(snapshot.val());

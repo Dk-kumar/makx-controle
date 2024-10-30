@@ -1,31 +1,46 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, Text, TextInput, StyleSheet, Button } from "react-native";
-import ToggleSwitch from "@/app/components/button/ToggleSwitch";
+import { View, Text, TextInput, StyleSheet, Button, Switch } from "react-native";
 import { SettingIndicator } from "@/app/components/homeComponent";
 import detailsContext from "@/app/hooks/FirebaseContext";
 import { updateData } from "../utils/service";
-
+import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 
 // Helper function for deep merging formData with motorData
 const initializeFormData = (motorData: any) => ({
-    timers: {
-        timerInfo: motorData.timeinfo?.timers?.timerInfo || { aTime: '', sdl: '', ext: '' },
-        cycleTime: motorData.timeinfo?.timers?.cycleTime || { onTime: '', offTime: '', present: '', switch: false },
-        runTime: motorData.timeinfo?.timers?.runTime || { set: '', present: '', switch: false },
-        dryRunTime: motorData.timeinfo?.timers?.dryRunTime || { set: '', present: '', switch: false },
+  timers: {
+    timerInfo: motorData.timeinfo?.timers?.timerInfo || {
+      aTime: "",
+      sdl: "",
+      ext: "",
     },
-    clocks: {
-        clock1: motorData.timeinfo?.clocks?.clock1 || { onTime: '', offTime: '', switch: false },
+    cycleTime: motorData.timeinfo?.timers?.cycleTime || {
+      onTime: "",
+      offTime: "",
+      present: "",
+      switch: false,
     },
+    runTime: motorData.timeinfo?.timers?.runTime || {
+      set: "",
+      present: "",
+      switch: false,
+    },
+    dryRunTime: motorData.timeinfo?.timers?.dryRunTime || {
+      set: "",
+      present: "",
+      switch: false,
+    },
+  },
+  clocks: {
+    clock1: motorData.timeinfo?.clocks?.clock1 || {
+      onTime: "",
+      offTime: "",
+      switch: false,
+    },
+  },
 });
 
 // Reusable InputBox component
-const InputBox: React.FC<{
-  label: string;
-  value: string;
-  unit: string;
-  onChange: (text: string) => void;
-}> = ({ label, value, unit, onChange }) => (
+const InputBox = ({ label, value, unit, onChange }: any) => (
   <View style={styles.inputBox}>
     <Text style={styles.inputLabel}>{label}</Text>
     <TextInput style={styles.textInput} value={value} onChangeText={onChange} />
@@ -34,32 +49,24 @@ const InputBox: React.FC<{
 );
 
 // Reusable ToggleBox component
-const ToggleBox: React.FC<{
-  label: string;
-  toggleState: boolean;
-  inputs: Array<{
-    label: string;
-    value: string;
-    unit: string;
-    onChange: (text: string) => void;
-  }>;
-  onToggleChange: (state: boolean) => void;
-}> = ({ label, toggleState, inputs, onToggleChange }) => (
+const ToggleBox = ({ label, toggleState, inputs, onToggleChange }: any) => (
   <View style={styles.boxContainer}>
     <View style={styles.boxTop}>
       <Text style={styles.label}>{label}</Text>
-      <ToggleSwitch
-        option1="ON"
-        color1="green"
-        option2="OFF"
-        color2="gray"
-        switchStyle={styles.switchStyle}
-        isOn={toggleState}
-        onValueChange={onToggleChange}
-      />
+      <SafeAreaProvider>
+        <SafeAreaView style={styles.container}>
+          <Switch
+            trackColor={{ false: "#FF0000", true: "#228B22" }}
+            thumbColor={toggleState ? "#f5dd4b" : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={onToggleChange}
+            value={toggleState}
+          />
+        </SafeAreaView>
+      </SafeAreaProvider>
     </View>
     <View style={styles.boxBottom}>
-      {inputs.map((input, index) => (
+      {inputs.map((input: any, index: any) => (
         <InputBox
           key={index}
           label={input.label}
@@ -72,25 +79,19 @@ const ToggleBox: React.FC<{
   </View>
 );
 
-export const Timer: React.FC = () => {
+export const Timer = () => {
   const { motorData = {} } = useContext(detailsContext);
   const [isDirty, setIsDirty] = useState(false);
-
   const [formData, setFormData] = useState(() => initializeFormData(motorData));
 
   useEffect(() => {
     if (motorData.timeinfo) {
-        setFormData(initializeFormData(motorData));
+      setFormData(initializeFormData(motorData));
     }
-}, [motorData]);
+  }, [motorData]);
 
   // Handler to update form fields, accounting for nested objects
-  const handleInputChange = (
-    section: string,
-    subSection: string,
-    field: string,
-    value: string
-  ) => {
+  const handleInputChange = (section: any, subSection: any, field: any, value: any) => {
     setFormData((prevState: any) => ({
       ...prevState,
       [section]: {
@@ -101,20 +102,21 @@ export const Timer: React.FC = () => {
         },
       },
     }));
-
     setIsDirty(true);
   };
 
-  // Handler to update toggle switches
-  const handleToggleChange = (section: string, value: boolean) => {
+  // Handler to update toggle switches dynamically based on section and subSection
+  const handleToggleChange = (section: any, subSection: any, value: any) => {
     setFormData((prevState: any) => ({
       ...prevState,
       [section]: {
         ...prevState[section],
-        switch: value,
+        [subSection]: {
+          ...prevState[section][subSection],
+          switch: value,
+        },
       },
     }));
-
     setIsDirty(true);
   };
 
@@ -125,9 +127,9 @@ export const Timer: React.FC = () => {
     };
 
     updateData(timerObj);
-
     setIsDirty(false);
   };
+
   return (
     <View style={styles.container}>
       <SettingIndicator customStyleDropDown={styles.customStyleDropDown} />
@@ -142,7 +144,7 @@ export const Timer: React.FC = () => {
             label="A.Time"
             value={formData.timers.timerInfo.aTime}
             unit="m"
-            onChange={(text) =>
+            onChange={(text: any) =>
               handleInputChange("timers", "timerInfo", "aTime", text)
             }
           />
@@ -150,7 +152,7 @@ export const Timer: React.FC = () => {
             label="SDL"
             value={formData.timers.timerInfo.sdl}
             unit="s"
-            onChange={(text) =>
+            onChange={(text: any) =>
               handleInputChange("timers", "timerInfo", "sdl", text)
             }
           />
@@ -158,7 +160,7 @@ export const Timer: React.FC = () => {
             label="EXT"
             value={formData.timers.timerInfo.ext}
             unit="s"
-            onChange={(text) =>
+            onChange={(text: any) =>
               handleInputChange("timers", "timerInfo", "ext", text)
             }
           />
@@ -169,27 +171,29 @@ export const Timer: React.FC = () => {
       <ToggleBox
         label="Cycle Time"
         toggleState={formData.timers.cycleTime.switch}
-        onToggleChange={(value) => handleToggleChange("cycleTime", value)}
+        onToggleChange={(value: any) =>
+          handleToggleChange("timers", "cycleTime", value)
+        }
         inputs={[
           {
             label: "On Time",
             value: formData.timers.cycleTime.onTime,
             unit: "m",
-            onChange: (text) =>
+            onChange: (text: any) =>
               handleInputChange("timers", "cycleTime", "onTime", text),
           },
           {
             label: "Off Time",
             value: formData.timers.cycleTime.offTime,
             unit: "m",
-            onChange: (text) =>
+            onChange: (text: any) =>
               handleInputChange("timers", "cycleTime", "offTime", text),
           },
           {
             label: "Present",
             value: formData.timers.cycleTime.present,
             unit: "m",
-            onChange: (text) =>
+            onChange: (text: any) =>
               handleInputChange("timers", "cycleTime", "present", text),
           },
         ]}
@@ -199,20 +203,22 @@ export const Timer: React.FC = () => {
       <ToggleBox
         label="Run Time"
         toggleState={formData.timers.runTime.switch}
-        onToggleChange={(value) => handleToggleChange("runTime", value)}
+        onToggleChange={(value: any) =>
+          handleToggleChange("timers", "runTime", value)
+        }
         inputs={[
           {
             label: "Set",
             value: formData.timers.runTime.set,
             unit: "m",
-            onChange: (text) =>
+            onChange: (text: any) =>
               handleInputChange("timers", "runTime", "set", text),
           },
           {
             label: "Present",
             value: formData.timers.runTime.present,
             unit: "m",
-            onChange: (text) =>
+            onChange: (text: any) =>
               handleInputChange("timers", "runTime", "present", text),
           },
         ]}
@@ -222,20 +228,22 @@ export const Timer: React.FC = () => {
       <ToggleBox
         label="Dry Run Time"
         toggleState={formData.timers.dryRunTime.switch}
-        onToggleChange={(value) => handleToggleChange("dryRunTime", value)}
+        onToggleChange={(value: any) =>
+          handleToggleChange("timers", "dryRunTime", value)
+        }
         inputs={[
           {
             label: "Set",
             value: formData.timers.dryRunTime.set,
             unit: "m",
-            onChange: (text) =>
+            onChange: (text: any) =>
               handleInputChange("timers", "dryRunTime", "set", text),
           },
           {
             label: "Present",
             value: formData.timers.dryRunTime.present,
             unit: "m",
-            onChange: (text) =>
+            onChange: (text: any) =>
               handleInputChange("timers", "dryRunTime", "present", text),
           },
         ]}
@@ -245,20 +253,22 @@ export const Timer: React.FC = () => {
       <ToggleBox
         label="Clock1"
         toggleState={formData.clocks.clock1.switch}
-        onToggleChange={(value) => handleToggleChange("clock1", value)}
+        onToggleChange={(value: any) =>
+          handleToggleChange("clocks", "clock1", value)
+        }
         inputs={[
           {
             label: "On Time",
             value: formData.clocks.clock1.onTime,
             unit: "m",
-            onChange: (text) =>
+            onChange: (text: any) =>
               handleInputChange("clocks", "clock1", "onTime", text),
           },
           {
             label: "Off Time",
             value: formData.clocks.clock1.offTime,
             unit: "m",
-            onChange: (text) =>
+            onChange: (text: any) =>
               handleInputChange("clocks", "clock1", "offTime", text),
           },
         ]}
