@@ -1,7 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, Text, TextInput, StyleSheet, Button, Switch } from "react-native";
+import { View, ScrollView, RefreshControl, Text, TextInput, StyleSheet, Button, Switch } from "react-native";
 import { SettingIndicator } from "@/app/components/homeComponent";
 import detailsContext from "@/app/hooks/FirebaseContext";
+import useRefresh from '@/app/hooks/useRefresh';
 import { updateData } from "../utils/service";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -84,6 +85,11 @@ export const Timer = () => {
   const [isDirty, setIsDirty] = useState(false);
   const [formData, setFormData] = useState(() => initializeFormData(motorData));
 
+  const fetchData = async (): Promise<void> => {
+    console.log("refreshing and fetching data.....");
+  };
+  const { refreshing , onRefresh } = useRefresh(fetchData);
+
   useEffect(() => {
     if (motorData.timeinfo) {
       setFormData(initializeFormData(motorData));
@@ -131,7 +137,10 @@ export const Timer = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView 
+      style={styles.container}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={["#000000"] /*android*/} tintColor="#000000" /*ios*//>}
+    >
       <SettingIndicator customStyleDropDown={styles.customStyleDropDown} />
 
       {/* Time Information */}
@@ -275,7 +284,7 @@ export const Timer = () => {
       />
 
       <Button title="Save" onPress={handleSave} disabled={!isDirty} />
-    </View>
+    </ScrollView>
   );
 };
 
