@@ -65,7 +65,7 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = (
 
   const backgroundColor = isToggled ? color2 : color1;
   const textStyle = {
-    fontSize: switchDimensions.height * 0.35
+    fontSize: (switchDimensions.height <= 0 ? 0.5 : switchDimensions.height) * 0.35
   };
   const dynamicToggleButtonStyle = {
     width:  switchDimensions.height * 0.6,

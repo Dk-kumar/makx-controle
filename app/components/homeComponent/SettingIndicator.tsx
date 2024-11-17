@@ -12,7 +12,7 @@ interface SettingIndicator {
   customStyleDropDown ?: ViewStyle
 }
 
-export const SettingIndicator : React.FC <SettingIndicator> = ({ customStyleSetting, customStyleDropDown}) => {
+export const SettingIndicator : React.FC <SettingIndicator> = ({ customStyleSetting, customStyleDropDown = {}}) => {
   
   const navigation = useSwitchRoute();
   const [date, setDate] = useState(new Date());
@@ -27,19 +27,22 @@ export const SettingIndicator : React.FC <SettingIndicator> = ({ customStyleSett
 
   const [isDropdownVisible, setDropdownVisible] = useState(false);
 
-
-
   const handleSelect = (route: string) =>{
     setDropdownVisible(false);
     navigation.switchRoute(route);
   };
-
 
   const options = [
     { label: 'Amps & Volts', route: 'Amps & Volts' },
     { label: 'Timer', route: 'Timer' },
     { label: 'Notification', route: 'Notification' }
   ];
+
+  const dropDownPosition = {
+    x: 20,
+    y: 50,
+    height: 90
+  }
 
   return (
     <View style={[styles.container, customStyleSetting]}>
@@ -50,7 +53,12 @@ export const SettingIndicator : React.FC <SettingIndicator> = ({ customStyleSett
         />
       </TouchableOpacity>
       {isDropdownVisible && (
-        <DropdownMenu options={options} customStyle={customStyleDropDown} onSelect={handleSelect} onClose={() => setDropdownVisible(false)} />
+        <DropdownMenu 
+          options={options}
+          onSelect={handleSelect}
+          onClose={() => setDropdownVisible(false)}
+          anchorPosition = {dropDownPosition}
+        />
       )}
       <Text>{format(date, 'yyyy-MM-dd HH:mm:ss a')}</Text>
     </View>
@@ -72,5 +80,5 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-  },
+  }
 });

@@ -1,46 +1,114 @@
-import React from 'react';
-import { View, Text, StyleSheet, ViewStyle, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+  Dimensions,
+} from 'react-native';
 
-
-interface DropdownMenu {
-    options: { label: string; route: string }[];
-    onSelect: (route: string) => void;
-    customStyle ?: ViewStyle
-    onClose: () => void;
+interface DropdownMenuProps {
+  options: { label: string; route: string }[];
+  onSelect: (route: string) => void;
+  customStyle?: { dropdown?: object; dropdownItem?: object };
+  onClose: () => void;
+  anchorPosition?: { x: number; y: number; height: number };
 }
 
-export const DropdownMenu: React.FC<DropdownMenu> = ({ options, customStyle, onSelect, onClose }) => {
+export const DropdownMenu: React.FC<DropdownMenuProps> = ({
+  options,
+  customStyle,
+  onSelect,
+  onClose,
+  anchorPosition,
+}) => {
+  const [adjustedPosition, setAdjustedPosition] = useState({
+    x: 0,
+    y: 0,
+    maxWidth: Dimensions.get('window').width,
+    maxHeight: Dimensions.get('window').height,
+  });
+
+  useEffect(() => {
+    if(anchorPosition) {
+      const { x, y, height } = anchorPosition;
+      const screenWidth = Dimensions.get('window').width;
+      const screenHeight = Dimensions.get('window').height;
+
+      const dropdownWidth = 200;
+      const dropdownHeight = options.length * 50;
+
+      let adjustedX = x;
+      let adjustedY = y + height;
+
+      if(x + dropdownWidth > screenWidth) {
+        adjustedX = screenWidth - dropdownWidth - 10;
+      }
+
+      if(adjustedY + dropdownHeight > screenHeight){
+        adjustedY = y - dropdownHeight - 10;
+      }
+
+      setAdjustedPosition({ x: adjustedX, y: adjustedY, maxWidth: screenWidth, maxHeight: screenHeight });
+    }
+  }, [anchorPosition]);
+
   return (
-    <View style={[styles.dropdown, customStyle]}>
-      {options.map((option, index) => (
-        <TouchableOpacity key={index} onPress={() => onSelect(option.route)} style={styles.dropdownItem}>
-          <Text style={styles.dropdownItemText}>{option.label}</Text>
-        </TouchableOpacity>
-      ))}
-    </View>
+    <Modal transparent={true} onRequestClose={onClose}>
+      <TouchableOpacity
+        style={styles.overlay}
+        activeOpacity={1}
+        onPress={onClose}
+      >
+        <View
+          style={[
+            styles.dropdown,
+            {
+              top: adjustedPosition.y,
+              left: adjustedPosition.x,
+              width: 200, // Fixed width; adjust as needed
+            },
+            customStyle?.dropdown,
+          ]}
+        >
+          {options.map((option, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => {
+                onClose();
+                onSelect(option.route);
+              }}
+              style={[styles.dropdownItem, customStyle?.dropdownItem]}
+            >
+              <Text style={styles.dropdownItemText}>{option.label}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </TouchableOpacity>
+    </Modal>
   );
 };
 
 const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.0)',
+  },
   dropdown: {
     position: 'absolute',
-    top: 40,
-    left: 0,
-    right: 0,
     backgroundColor: '#fff',
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 10,
-    width: '50%'
+    zIndex: 10,
   },
   dropdownItem: {
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
-    zIndex: 1000,
   },
   dropdownItemText: {
     fontSize: 16,
-    zIndex: 1000,
   },
 });

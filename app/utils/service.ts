@@ -9,7 +9,6 @@ export const updateData = async (inputValue: any) => {
     })
 
     const data = await response.json()
-    console.log(data)
   }
   catch(e) {
     console.error(e)

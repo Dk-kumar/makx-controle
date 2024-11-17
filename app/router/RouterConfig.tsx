@@ -13,7 +13,7 @@ const RouterConfig: React.FC = () =>{
   };
 
   return (
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="Signin">
         {routes.map((route) => (
           <Stack.Screen
             key={route.name}
@@ -21,7 +21,7 @@ const RouterConfig: React.FC = () =>{
             component={route.component}
             options={{ 
               title: route?.title,
-              headerShown: true,
+              headerShown: route?.headerShown,
               headerStyle:{
                 height: 95
               },

@@ -11,7 +11,7 @@ export const HomeScreen = () => {
   const [isEnabledCyclic, setIsEnabledCyclic] = useState(false);
   const [isEnabledRun, setIsEnabledRun] = useState(false);
   const [isEnabledDryRun, setIsEnabledDryRun] = useState(false);
-  
+
   const { userData = {}, motorData = {} } = useContext(detailsContext);
   const { setTitle } = useSwitchRoute();
 

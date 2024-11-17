@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import { RefreshControl } from 'react-native';
 
 type RefreshAction = () => Promise<void>;
 
