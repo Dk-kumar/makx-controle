@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import { InputBox } from '@/app/components/input/InputBox';
 import { Button } from '@/app/components/button/Button';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useSwitchRoute } from '@/app/components/navigation/useSwitchRoute';
 
-export const Signin: React.FC = () => {
+import { requestSignIn } from '@/app/utils/service';
+
+const Signin: React.FC = () => {
   const [username, setUsername] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [activationCode, setActivationCode] = useState('');
@@ -18,8 +20,25 @@ export const Signin: React.FC = () => {
   };
 
   const handleSignIn = () => {
-    console.log('Sign in pressed with:', { username, phoneNumber, activationCode });
-    switchRoute("Home");
+    if(!username || !phoneNumber || !activationCode)
+    {
+      return Alert.alert('Error', 'Please fill in all required fields.');
+    }
+
+    const data = {
+      username: username,
+      phonenumber: phoneNumber,
+      activationcode: activationCode
+    };
+    requestSignIn(data).then(res =>{
+      const resData = JSON.parse(res);
+      if(resData.isSuccess)
+      {
+        return switchRoute("Home");
+      }
+    }).catch(error =>{
+      Alert.alert('Error', 'Something went wrong, please try again later');
+    });
   };
 
   return (
@@ -134,3 +153,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+export default Signin;

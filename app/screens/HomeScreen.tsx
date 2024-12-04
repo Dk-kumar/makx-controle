@@ -7,7 +7,7 @@ import CircularTimer from '@/app/components/button/CircularTimer';
 
 import detailsContext from '@/app/hooks/FirebaseContext';
 
-export const HomeScreen = () => {
+const HomeScreen = () => {
   const [isEnabledCyclic, setIsEnabledCyclic] = useState(false);
   const [isEnabledRun, setIsEnabledRun] = useState(false);
   const [isEnabledDryRun, setIsEnabledDryRun] = useState(false);
@@ -216,3 +216,5 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
+
+export default HomeScreen;

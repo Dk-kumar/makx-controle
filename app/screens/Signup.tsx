@@ -1,16 +1,40 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import { InputBox } from '@/app/components/input/InputBox';
 import { Button } from '@/app/components/button/Button';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { requestSignUp } from '@/app/utils/service';
+import { useSwitchRoute } from '@/app/components/navigation/useSwitchRoute';
 
-export const Signup: React.FC = () => {
+const Signup: React.FC = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [activationCode, setActivationCode] = useState('');
+  const { switchRoute, setTitle } = useSwitchRoute();
 
   const handleSignIn = () => {
+    if(!username || !email || !phoneNumber || !activationCode)
+      {
+        return Alert.alert('Error', 'Please fill in all required fields.');
+      }
+  
+      const data = {
+        username: username,
+        phonenumber: phoneNumber,
+        email: email,
+        activationcode: activationCode
+      };
+      requestSignUp(data).then(res =>{
+        const resData = JSON.parse(res);
+        if(resData.isSuccess)
+        {
+          Alert.alert('Success', 'Account created successfully! kindly login now...');
+          return switchRoute("Signin");
+        }
+      }).catch(error =>{
+        Alert.alert('Error', 'Something went wrong, please try again later');
+      });
     console.log('Sign up pressed with:', { username, phoneNumber, activationCode });
   };
 
@@ -93,3 +117,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+export default Signup;

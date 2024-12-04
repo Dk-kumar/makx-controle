@@ -6,7 +6,7 @@ interface CurrentDisplayProps {
     value: any;
 }
 
-export const CurrentDisplay : React.FC<CurrentDisplayProps> = ({ label, value }) => {
+const CurrentDisplay : React.FC<CurrentDisplayProps> = ({ label, value }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
@@ -35,3 +35,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+export default CurrentDisplay;

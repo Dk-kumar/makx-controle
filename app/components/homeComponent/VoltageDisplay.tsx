@@ -6,7 +6,7 @@ interface VoltageDisplayProps {
     value: any;
 }
 
-export const VoltageDisplay : React.FC<VoltageDisplayProps> = ({ label, value }) => {
+const VoltageDisplay : React.FC<VoltageDisplayProps> = ({ label, value }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
@@ -36,3 +36,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+export default VoltageDisplay;

@@ -52,7 +52,7 @@ const InputField = ({ label, value, unit, onChange }: any) => (
   </View>
 );
 
-export const AmsVoltage = () => {
+const AmsVoltage = () => {
   const { motorData: { 'amps&volts': ams_voltage = {} } = {} } = useContext(detailsContext);
   const [isDirty, setIsDirty] = useState(false);
   const [formData, setFormData] = useState<any>(() => initializeFormData(ams_voltage));
@@ -240,3 +240,4 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
 });
+export default AmsVoltage;

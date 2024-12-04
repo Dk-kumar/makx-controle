@@ -80,7 +80,7 @@ const ToggleBox = ({ label, toggleState, inputs, onToggleChange }: any) => (
   </View>
 );
 
-export const Timer = () => {
+const Timer = () => {
   const { motorData = {} } = useContext(detailsContext);
   const [isDirty, setIsDirty] = useState(false);
   const [formData, setFormData] = useState(() => initializeFormData(motorData));
@@ -346,3 +346,4 @@ const styles = StyleSheet.create({
     position: "relative",
   },
 });
+export default Timer;

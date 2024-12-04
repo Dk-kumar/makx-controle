@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-export const PhaseIndicator = () => {
+const PhaseIndicator = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.phaseText}>PHASE</Text>
@@ -28,3 +28,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
 });
+export default PhaseIndicator;

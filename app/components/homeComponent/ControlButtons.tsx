@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
-export const ControlButtons = () => {
+const ControlButtons = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.button}>
@@ -25,3 +25,4 @@ const styles = StyleSheet.create({
     padding: 15,
   },
 });
+export default ControlButtons;

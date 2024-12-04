@@ -18,15 +18,18 @@ export default function Index(){
     const dbRef = ref(database, 'users/E2O8uA4w3UHWI4S3hgeZ');
     const dbMotorsRef = ref(database, 'motors/qJzAIcv03PyaWqxRgO4mSU3l');
   
-    const unsubscribeUser = onValue(dbRef, (snapshot) => {
-      if (snapshot.exists()) {
-        setUserData(snapshot.val());
-      } else {
-        setUserData(null);
-      }
-    }, (error) => {
-      setError(error);
-    });
+    const unsubscribeUser = onValue(dbRef,
+      (snapshot) => {
+        if (snapshot.exists()) {
+          setUserData(snapshot.val());
+        } else {
+          setUserData(null);
+        }
+      },
+      (error) => {
+        console.error("Error fetching user data:", error);
+        setError(error);
+      });
   
     const unsubscribeMotor = onValue(dbMotorsRef, (snapshot) => {
       if (snapshot.exists()) {
@@ -38,7 +41,6 @@ export default function Index(){
       setError(error);
     });
   
-    // Cleanup function to remove listeners when the component unmounts
     return () => {
       unsubscribeUser();
       unsubscribeMotor();
@@ -55,8 +57,6 @@ export default function Index(){
           </NavigationContainer>
         )
       }
-      
     </PageNameContext.Provider>
-   
   )
 }

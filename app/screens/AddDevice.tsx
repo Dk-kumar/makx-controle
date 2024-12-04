@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { InputBox } from '@/app/components/input/InputBox';
 import { Button } from '@/app/components/button/Button';
+import { requestAddDevice } from '@/app/utils/service';
 
-export const AddDevice: React.FC = () => {
+const AddDevice: React.FC = () => {
   const [deviceName, setDeviceName] = useState('');
   const [activationCode, setActivationCode] = useState('');
   const [errors, setErrors] = useState({ deviceName: false, activationCode: false });
@@ -18,8 +19,23 @@ export const AddDevice: React.FC = () => {
     });
 
     if(isDeviceNameValid && isActivationCodeValid){
-      console.log('Adding device:', { deviceName, activationCode });
-      Alert.alert('Success', 'Device added successfully!');
+      const data = {
+        deviceName: deviceName,
+        activationCode: activationCode
+      }
+      requestAddDevice(data).then(res =>{
+        const respData = JSON.parse(res);
+        if(respData.isSuccess)
+        {
+          Alert.alert('Success', 'Device added successfully!');
+        }
+        else if(respData.isInValidId)
+        {
+          Alert.alert('Error', 'Motor Id is invalid, kindly check again');
+        }
+      }).catch(error =>{
+        Alert.alert('Error', 'Something went wrong, please try again after some time');
+      });
     }
     else{
       Alert.alert('Error', 'Please fill in all required fields.');
@@ -77,3 +93,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+export default AddDevice;

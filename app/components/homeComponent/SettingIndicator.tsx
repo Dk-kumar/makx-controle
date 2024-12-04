@@ -12,7 +12,7 @@ interface SettingIndicator {
   customStyleDropDown ?: ViewStyle
 }
 
-export const SettingIndicator : React.FC <SettingIndicator> = ({ customStyleSetting, customStyleDropDown = {}}) => {
+const SettingIndicator : React.FC <SettingIndicator> = ({ customStyleSetting, customStyleDropDown = {}}) => {
   
   const navigation = useSwitchRoute();
   const [date, setDate] = useState(new Date());
@@ -82,3 +82,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
   }
 });
+export default SettingIndicator;

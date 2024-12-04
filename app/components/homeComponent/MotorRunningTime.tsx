@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-export const MotorRunningTime = () => {
+const MotorRunningTime = () => {
   return (
     <TouchableOpacity>
         <View style={styles.container}>
@@ -27,3 +27,4 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 });
+export default MotorRunningTime;
