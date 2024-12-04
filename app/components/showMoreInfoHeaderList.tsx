@@ -11,7 +11,7 @@ export const MoreInfoHeader: React.FC = () => {
     y: 0,
     height: 0,
   });
-  const iconRef = useRef<TouchableOpacity>(null);
+  const iconRef = useRef<React.ElementRef<typeof TouchableOpacity>>(null);
   const navigation = useSwitchRoute();
 
   const { width: screenWidth } = Dimensions.get('window');

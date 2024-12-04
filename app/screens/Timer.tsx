@@ -3,7 +3,7 @@ import { View, ScrollView, RefreshControl, Text, TextInput, StyleSheet, Button, 
 import { SettingIndicator } from "@/app/components/homeComponent";
 import detailsContext from "@/app/hooks/FirebaseContext";
 import useRefresh from '@/app/hooks/useRefresh';
-import { updateData } from "../utils/service";
+import { updateData } from '@/app/utils/service'
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 
 // Helper function for deep merging formData with motorData
