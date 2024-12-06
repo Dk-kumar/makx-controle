@@ -30,14 +30,16 @@ const Signin: React.FC = () => {
       phonenumber: phoneNumber,
       activationcode: activationCode
     };
-    requestSignIn(data).then(res =>{
-      const resData = JSON.parse(res);
-      if(resData.isSuccess)
+    requestSignIn(data).then(res => {
+      const resData = res.data;
+      if(!resData || !resData.isSuccess)
       {
-        return switchRoute("Home");
+        Alert.alert('Error', 'Invalid Crendentials');
+        return null;
       }
-    }).catch(error =>{
-      Alert.alert('Error', 'Something went wrong, please try again later');
+      return switchRoute("Home");
+    }).catch(error => {
+      Alert.alert('Error', 'Something went wrong, please try again later '+ error);
     });
   };
 
@@ -139,7 +141,7 @@ const styles = StyleSheet.create({
   signUpContainer: {
     backgroundColor: 'transparent',
     width: '65%',
-    height: 45,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
@@ -151,6 +153,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#003cb3',
     fontWeight: 'bold',
-  },
+  }
 });
 export default Signin;

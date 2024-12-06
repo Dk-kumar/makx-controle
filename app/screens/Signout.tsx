@@ -1,11 +1,11 @@
-import React from 'react';
-import { View, Text } from 'react-native';
+import { useEffect } from 'react';
+import { useSwitchRoute } from '@/app/components/navigation/useSwitchRoute';
 
-const Signout : React.FC = () =>{
-    return(
-        <View>
-            <Text>Signout</Text>
-        </View>
-    )
-}
+const Signout = (): null => {
+    const { switchRoute } = useSwitchRoute();
+    useEffect(() => {
+        switchRoute("Signin");
+    }, [switchRoute]);
+    return null;
+};
 export default Signout;

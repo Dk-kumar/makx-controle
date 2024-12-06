@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import { InputBox } from '@/app/components/input/InputBox';
 import { Button } from '@/app/components/button/Button';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -13,7 +13,7 @@ const Signup: React.FC = () => {
   const [activationCode, setActivationCode] = useState('');
   const { switchRoute, setTitle } = useSwitchRoute();
 
-  const handleSignIn = () => {
+  const handleSignUp = () => {
     if(!username || !email || !phoneNumber || !activationCode)
       {
         return Alert.alert('Error', 'Please fill in all required fields.');
@@ -26,17 +26,24 @@ const Signup: React.FC = () => {
         activationcode: activationCode
       };
       requestSignUp(data).then(res =>{
-        const resData = JSON.parse(res);
-        if(resData.isSuccess)
+        const resData = res;
+        if(!resData || !resData.isSuccess || resData.message)
         {
-          Alert.alert('Success', 'Account created successfully! kindly login now...');
-          return switchRoute("Signin");
+          Alert.alert('Error', resData.message);
+          return null;
         }
+
+        Alert.alert('Success', 'Account created successfully! kindly login now...');
+        return switchRoute("Signin");
+
       }).catch(error =>{
         Alert.alert('Error', 'Something went wrong, please try again later');
       });
-    console.log('Sign up pressed with:', { username, phoneNumber, activationCode });
   };
+
+  const handleSignIn = () =>{
+    switchRoute("Signin");
+  }
 
   return (
     <View style={styles.container}>
@@ -76,8 +83,17 @@ const Signup: React.FC = () => {
         label="Sign Up"
         buttonStyle={styles.buttonContainer}
         textStyle={styles.buttonText}
-        onPress={handleSignIn}
+        onPress={handleSignUp}
       />
+      <View style={styles.signInSection}>
+        <Text style={styles.signInPrompt}>Don't have an account?</Text>
+        <Button
+          label="Sign In"
+          buttonStyle={styles.signInContainer}
+          textStyle={styles.signInText}
+          onPress={handleSignIn}
+        />
+      </View>
     </View>
   );
 };
@@ -116,5 +132,31 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  signInSection: {
+    marginTop: 30,
+    width: '100%',
+    alignItems: 'center',
+  },
+  signInPrompt: {
+    fontSize: 14,
+    color: '#333',
+    marginBottom: 10,
+  },
+  signInContainer: {
+    backgroundColor: 'transparent',
+    width: '65%',
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#003cb3',
+    borderRadius: 9,
+    padding: 9
+  },
+  signInText: {
+    fontSize: 16,
+    color: '#003cb3',
+    fontWeight: 'bold',
+  }
 });
 export default Signup;

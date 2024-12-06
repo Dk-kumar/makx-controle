@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "motor-app",
-    "slug": "motor-app",
+    "name": "makx-controle",
+    "slug": "makx-controle",
     "scheme": "motorApp",
     "version": "1.0.0",
     "platforms": [
@@ -17,9 +17,9 @@
       "bundleIdentifier": "com.deepan.motorapp"
     },
     "orientation": "portrait",
-    "icon": "",
+    "icon": "/Users/murali-15351/makx-controle/app/images/appLogo.png",
     "splash": {
-      "image": "",
+      "image": "/Users/murali-15351/makx-controle/app/images/appLogo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

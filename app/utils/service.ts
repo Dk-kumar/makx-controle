@@ -6,10 +6,8 @@ export const updateData = async (inputValue: any) => {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify(inputValue)
-    })
-
-    const data = await response.json();
-    return data;
+    });
+    return response.json();
   }
   catch(e) {
     console.error(e)
@@ -26,7 +24,7 @@ export const requestSignIn = async (formData: object) =>{
     return await response.json();
   }
   catch(e){
-    console.log(e);
+    console.log("Error from requestSignIn", e);
   }
 }
 

@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { InputBox } from '@/app/components/input/InputBox';
 import { Button } from '@/app/components/button/Button';
 import { requestAddDevice } from '@/app/utils/service';
 
+import detailsContext from '@/app/hooks/FirebaseContext';
+
 const AddDevice: React.FC = () => {
   const [deviceName, setDeviceName] = useState('');
   const [activationCode, setActivationCode] = useState('');
   const [errors, setErrors] = useState({ deviceName: false, activationCode: false });
+
+  const { userData = {} } = useContext(detailsContext);
 
   const handleAddDevice = () => {
     const isDeviceNameValid = deviceName.trim() !== '';
@@ -20,11 +24,12 @@ const AddDevice: React.FC = () => {
 
     if(isDeviceNameValid && isActivationCodeValid){
       const data = {
-        deviceName: deviceName,
-        activationCode: activationCode
+        devicename: deviceName,
+        phonenumber: userData.phonenumber,
+        deviceid: activationCode
       }
       requestAddDevice(data).then(res =>{
-        const respData = JSON.parse(res);
+        const respData = JSON.parse(res.data);
         if(respData.isSuccess)
         {
           Alert.alert('Success', 'Device added successfully!');
