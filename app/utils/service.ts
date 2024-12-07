@@ -44,7 +44,7 @@ export const requestSignUp = async (formData: object) =>{
 
 export const requestAddDevice = async (formData: object) =>{
   try{
-    const response = await fetch(endpoint +"/motor/adddevice", {
+    const response = await fetch(endpoint +"/adddevice", {
       method: 'post',
       headers: { 'Content-Type' : 'application/json'},
       body: JSON.stringify(formData)

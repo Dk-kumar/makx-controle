@@ -1,19 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import routes from './routerConfiguration';
 import TopBackButton from '@/app/components/button/DefaultBack';
 import { TopRightHeader } from '@/app/components/TopRightHeader';
 
+interface RouterConfigProps {
+  initialRouteName: string;
+}
+
 const Stack = createStackNavigator();
 
-const RouterConfig: React.FC = () =>{
-  
+const RouterConfig: React.FC<RouterConfigProps> = ({ initialRouteName }) =>{
+
   const showBackButton = (headerShown: boolean) => {
     return headerShown ? <TopBackButton /> : null;
   };
 
   return (
-      <Stack.Navigator initialRouteName="Signin">
+      <Stack.Navigator initialRouteName={ initialRouteName }>
         {routes.map((route) => (
           <Stack.Screen
             key={route.name}

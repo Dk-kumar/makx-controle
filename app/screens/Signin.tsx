@@ -4,6 +4,7 @@ import { InputBox } from '@/app/components/input/InputBox';
 import { Button } from '@/app/components/button/Button';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useSwitchRoute } from '@/app/components/navigation/useSwitchRoute';
+import { usePageNameContext } from '@/app/index';
 
 import { requestSignIn } from '@/app/utils/service';
 
@@ -13,6 +14,7 @@ const Signin: React.FC = () => {
   const [activationCode, setActivationCode] = useState('');
 
   const { switchRoute, setTitle } = useSwitchRoute();
+  const { setUserInfo } = usePageNameContext();
 
   const handleSignUp = () => {
     switchRoute("Signup");
@@ -31,12 +33,13 @@ const Signin: React.FC = () => {
       activationcode: activationCode
     };
     requestSignIn(data).then(res => {
-      const resData = res.data;
-      if(!resData || !resData.isSuccess)
+      const { isSuccess = false, userid="", motorid="" } = res.data;
+      if(!isSuccess)
       {
         Alert.alert('Error', 'Invalid Crendentials');
         return null;
       }
+      setUserInfo({userid, motorid });
       return switchRoute("Home");
     }).catch(error => {
       Alert.alert('Error', 'Something went wrong, please try again later '+ error);

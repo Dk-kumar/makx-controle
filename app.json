@@ -2,7 +2,7 @@
   "expo": {
     "name": "makx-controle",
     "slug": "makx-controle",
-    "scheme": "motorApp",
+    "scheme": "makx-controle",
     "version": "1.0.0",
     "platforms": [
       "ios",

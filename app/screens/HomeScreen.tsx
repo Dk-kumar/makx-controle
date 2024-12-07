@@ -19,11 +19,7 @@ const HomeScreen = () => {
   useEffect(() =>{
     setTitle(userData.username);
   }, [userData]);
-
-  console.log(motorData)
-
-
-
+  
   const toggleCyclicSwitch = () => setIsEnabledCyclic(previousState => !previousState);
   const toggleRunSwitch = () => setIsEnabledRun(previousState => !previousState);
   const toggleDryRunSwitch = () => setIsEnabledDryRun(previousState => !previousState);
