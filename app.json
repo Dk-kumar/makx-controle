@@ -1,8 +1,9 @@
 {
   "expo": {
     "name": "makx-controle",
+    "displayName": "makx-controle",
     "slug": "makx-controle",
-    "scheme": "makx-controle",
+    "scheme": "motot-app",
     "version": "1.0.0",
     "platforms": [
       "ios",
@@ -10,11 +11,11 @@
       "web"
     ],
     "android": {
-      "package": "com.deepan.motorapp"
+      "package": "com.muralimohan.makxcontrole"
     },
     "build:android": "cd android && ./gradlew assembleRelease",
     "ios": {
-      "bundleIdentifier": "com.deepan.motorapp"
+      "bundleIdentifier": "com.muralimohan.makxcontrole"
     },
     "orientation": "portrait",
     "icon": "/Users/murali-15351/makx-controle/app/images/appLogo.png",
