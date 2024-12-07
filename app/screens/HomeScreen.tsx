@@ -1,28 +1,37 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, Button, StyleSheet, Switch, TouchableOpacity } from 'react-native';
+import { View, Text, ActivityIndicator, StyleSheet, Switch, TouchableOpacity } from 'react-native';
 import { ControlButtons, SettingIndicator } from '@/app/components/homeComponent';
 import { useSwitchRoute } from '@/app/components/navigation/useSwitchRoute';
 import ToggleSwitch from '@/app/components/button/ToggleSwitch';
 import CircularTimer from '@/app/components/button/CircularTimer';
 
-import detailsContext from '@/app/hooks/FirebaseContext';
+import { usePageNameContext } from '@/app/index';
 
 const HomeScreen = () => {
   const [isEnabledCyclic, setIsEnabledCyclic] = useState(false);
   const [isEnabledRun, setIsEnabledRun] = useState(false);
   const [isEnabledDryRun, setIsEnabledDryRun] = useState(false);
 
-  const { userData = {}, motorData = {} } = useContext(detailsContext);
+  const { userData, motorData } = usePageNameContext();
+  console.log(userData, motorData);
   const { setTitle } = useSwitchRoute();
-
   
   useEffect(() =>{
     setTitle(userData.username);
   }, [userData]);
-  
+
   const toggleCyclicSwitch = () => setIsEnabledCyclic(previousState => !previousState);
   const toggleRunSwitch = () => setIsEnabledRun(previousState => !previousState);
   const toggleDryRunSwitch = () => setIsEnabledDryRun(previousState => !previousState);
+
+  if(!userData.username || !motorData)
+  {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>

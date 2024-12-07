@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { View, ScrollView, RefreshControl, Text, TextInput, StyleSheet, Button, Switch } from "react-native";
 import { SettingIndicator } from "@/app/components/homeComponent";
 import { SafeAreaView } from "react-native-safe-area-context";
-import detailsContext from '@/app/hooks/FirebaseContext';
+import { usePageNameContext } from '@/app/index';
 import useRefresh from '@/app/hooks/useRefresh';
 import { updateData } from "../utils/service";
 
@@ -53,7 +53,7 @@ const InputField = ({ label, value, unit, onChange }: any) => (
 );
 
 const AmsVoltage = () => {
-  const { motorData: { 'amps&volts': ams_voltage = {} } = {} } = useContext(detailsContext);
+  const { motorData: { 'amps&volts': ams_voltage = {} } = {} } = usePageNameContext();
   const [isDirty, setIsDirty] = useState(false);
   const [formData, setFormData] = useState<any>(() => initializeFormData(ams_voltage));
 

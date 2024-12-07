@@ -3,6 +3,7 @@ import { TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AntDesign } from '@expo/vector-icons';
+import { useSwitchRoute } from '../navigation/useSwitchRoute';
 
 type RootStackParamList = {
     [key: string]: undefined;
@@ -11,22 +12,25 @@ type RootStackParamList = {
 type NavigationProp = StackNavigationProp<RootStackParamList>;
   
 const TopBackButton: React.FC= () => {
-    const navigation = useNavigation<NavigationProp>();
+    const { switchBack } = useSwitchRoute();
     const opacity = useRef(new Animated.Value(1)).current;
 
     const handlePress = () => {
-        Animated.timing(opacity, {
-          toValue: 0.5,
-          duration: 150,
-          useNativeDriver: true,
-        }).start(() => {
-          navigation.goBack();
+        try{
           Animated.timing(opacity, {
-            toValue: 1,
-            duration: 150,
+            toValue: 0.5,
+            duration: 100,
             useNativeDriver: true,
-          }).start();
-        });
+          }).start(() => {
+            switchBack();
+            Animated.timing(opacity, {
+              toValue: 1,
+              duration: 100,
+              useNativeDriver: true,
+            }).start();
+          });
+        }
+        catch(err){}
     };
   
     return(

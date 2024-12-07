@@ -10,10 +10,18 @@ export const useSwitchRoute = () => {
     const switchRoute = (route : string = "Home") => {
       navigation.navigate(route);
     };
+
+    const switchBack = () => {
+      if(navigation.canGoBack()){
+        navigation.goBack();
+      }else{
+        switchRoute();
+      }
+    }
     
     const setTitle = (title:string) =>{
       navigation.setOptions({ title });
     }
   
-    return { switchRoute, setTitle};
+    return { switchRoute, switchBack, setTitle};
 };
