@@ -1,31 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, Text, StyleSheet, Animated, View, LayoutChangeEvent } from 'react-native';
 
+export interface ToggleChangeProps {
+  keyName: string,
+  currentValue: string,
+  isToggled: boolean
+}
 interface ToggleSwitchProps {
+  name : string;
   option1: string;
   option2: string;
   color1 ?: string;
   color2 ?: string;
   switchStyle ?: object;
   toggleButtonStyle ?: object;
-  defaultValue ?: boolean
+  defaultValue ?: boolean;
+  onChange: (event: ToggleChangeProps) => void;
 }
 
-const ToggleSwitch: React.FC<ToggleSwitchProps> = (
+export const ToggleSwitch: React.FC<ToggleSwitchProps> = (
   {
+    name,
     option1,
     option2,
     color1 = 'green',
     color2 = 'green',
-    switchStyle = styles.switchContainer,
-    toggleButtonStyle = styles.toggleButton,
-    defaultValue = false
+    switchStyle,
+    toggleButtonStyle,
+    defaultValue = false,
+    onChange
   }) => {
   const [isToggled, setIsToggled] = useState(defaultValue);
   const [togglePosition] = useState(new Animated.Value(0));
   const [switchDimensions, setSwitchDimensions] = useState({ width: 0, height: 0 });
   const handleToggle = () => {
     setIsToggled(!isToggled);
+    onChange({keyName:name, currentValue: isToggled ? "option2" : "option1", isToggled: isToggled});
     Animated.timing(togglePosition, {
       toValue: isToggled ? 0 : 1,
       duration: 250,
@@ -75,24 +85,25 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = (
 
   return (
     <TouchableOpacity
-      style={[switchStyle, { backgroundColor}]}
+      style={[styles.switchContainer, switchStyle, { backgroundColor}]}
       onPress={handleToggle}
       onLayout={handleLayout}
     >
       <Text style={[styles.toggleText, textStyle]}>
-        {isToggled ? option2 : option1}
+        {isToggled ? option1 : option2}
       </Text>
-      <Animated.View style={[toggleButtonStyle, dynamicToggleButtonStyle, toggleStyles]} />
+      <Animated.View style={[styles.toggleButton, toggleButtonStyle, dynamicToggleButtonStyle, toggleStyles]} />
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   switchContainer: {
-    borderRadius: 20,
+    fontSize:16,
+    borderRadius: 10,
     marginBottom: 10,
-    width: 110,
-    height: 35,
+    width: 100,
+    height: 30,
     justifyContent: 'center',
     padding: 5,
     position: 'relative',
@@ -110,5 +121,3 @@ const styles = StyleSheet.create({
     marginLeft: 1,
   },
 });
-
-export default ToggleSwitch;

@@ -29,6 +29,6 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-, "../screens/Signup.tsx", "../screens/About.tsx", "../screens/AddDevice.tsx", "../screens/DeviceList.tsx", "../screens/Profile.tsx", "../screens/Signin.tsx", "../screens/Signout.tsx"  ],
+, "../screens/Signup.tsx", "../screens/About.tsx", "../screens/AddDevice.tsx", "../screens/DeviceList.tsx", "../screens/Profile.tsx", "../screens/Signin.tsx"  ],
   "extends": "expo/tsconfig.base"
 }

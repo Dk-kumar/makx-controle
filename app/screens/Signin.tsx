@@ -1,91 +1,110 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { InputBox } from '@/app/components/input/InputBox';
 import { Button } from '@/app/components/button/Button';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useSwitchRoute } from '@/app/components/navigation/useSwitchRoute';
 import { usePageNameContext } from '@/app/index';
-
 import { requestSignIn } from '@/app/utils/service';
 
 const Signin: React.FC = () => {
-  const [username, setUsername] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [activationCode, setActivationCode] = useState('');
+  const [formData, setFormData] = useState({
+    username: '',
+    phoneNumber: '',
+    activationCode: '',
+  });
 
   const { switchRoute, setTitle } = useSwitchRoute();
   const { setUserInfo } = usePageNameContext();
+   const [loading, setLoading] = useState(false);
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleSignUp = () => {
-    switchRoute("Signup");
-    setTitle("Sign Up");
+    switchRoute('Signup');
+    setTitle('Sign Up');
   };
 
-  const handleSignIn = () => {
-    if(!username || !phoneNumber || !activationCode)
-    {
-      return Alert.alert('Error', 'Please fill in all required fields.');
+  const handleSignIn = async () => {
+    setLoading(true);
+    const { username, phoneNumber, activationCode } = formData;
+
+    if (!username || !phoneNumber || !activationCode) {
+      return Alert.alert('Error', 'All fields are required.');
     }
 
-    const data = {
-      username: username,
-      phonenumber: phoneNumber,
-      activationcode: activationCode
-    };
-    requestSignIn(data).then(res => {
-      const { isSuccess = false, userid="", motorid="" } = res.data;
-      if(!isSuccess)
-      {
-        Alert.alert('Error', 'Invalid Crendentials');
-        return null;
+    try {
+      const data = { username, phonenumber: phoneNumber, activationcode: activationCode };
+      const response = await requestSignIn(data);
+
+      const { isSuccess = false, userid = '', motorid = '' } = response.data || {};
+      if(!isSuccess){
+        return Alert.alert('Error', 'Invalid credentials.');
       }
-      setUserInfo({userid, motorid });
-      return switchRoute("Home");
-    }).catch(error => {
-      Alert.alert('Error', 'Something went wrong, please try again later '+ error);
-    });
+      setUserInfo({ userid, motorid });
+      switchRoute('Home');
+    } catch(error) {
+      Alert.alert('Error', `An error occurred. Please try again later. \nDetails: ${error}`);
+    }
+    finally{
+      setLoading(false);
+    }
   };
+
+  if(loading){
+      return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      );
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>MakxControle</Text>
+
       <View style={styles.imageContainer}>
-        <FontAwesome name="user-circle-o" size={100} color="black" style={styles.userImage} />
+        <FontAwesome name="user-circle-o" size={100} color="black" />
       </View>
+
       <InputBox
         label="Username"
         placeholder="Enter your username"
-        defaultValue={username}
-        onChangeText={setUsername}
-        required={true}
+        defaultValue={formData.username}
+        onChangeText={(text) => handleInputChange('username', text)}
+        required
       />
       <InputBox
         label="Phone Number"
         placeholder="Enter your phone number"
         keyboardType="phone-pad"
-        defaultValue={phoneNumber}
-        onChangeText={setPhoneNumber}
-        required={true}
+        defaultValue={formData.phoneNumber}
+        onChangeText={(text) => handleInputChange('phoneNumber', text)}
+        required
       />
       <InputBox
         label="Activation Code (IMEI)"
         placeholder="Enter your activation code"
-        defaultValue={activationCode}
-        onChangeText={setActivationCode}
-        required={true}
+        defaultValue={formData.activationCode}
+        onChangeText={(text) => handleInputChange('activationCode', text)}
+        required
       />
+
       <Button
         label="Sign In"
-        buttonStyle={styles.buttonContainer}
+        buttonStyle={styles.primaryButton}
         textStyle={styles.buttonText}
         onPress={handleSignIn}
       />
+
       <View style={styles.signUpSection}>
         <Text style={styles.signUpPrompt}>Don't have an account?</Text>
         <Button
           label="Sign Up"
-          buttonStyle={styles.signUpContainer}
-          textStyle={styles.signUpText}
+          buttonStyle={styles.secondaryButton}
+          textStyle={styles.secondaryButtonText}
           onPress={handleSignUp}
         />
       </View>
@@ -111,13 +130,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
-  userImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: '#d3d3d3',
-  },
-  buttonContainer: {
+  primaryButton: {
     backgroundColor: '#003cb3',
     width: '80%',
     height: 45,
@@ -141,7 +154,7 @@ const styles = StyleSheet.create({
     color: '#333',
     marginBottom: 10,
   },
-  signUpContainer: {
+  secondaryButton: {
     backgroundColor: 'transparent',
     width: '65%',
     height: 50,
@@ -150,12 +163,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#003cb3',
     borderRadius: 9,
-    padding: 9
+    padding: 9,
   },
-  signUpText: {
+  secondaryButtonText: {
     fontSize: 16,
     color: '#003cb3',
     fontWeight: 'bold',
-  }
+  },
 });
+
 export default Signin;

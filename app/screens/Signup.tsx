@@ -27,7 +27,7 @@ const Signup: React.FC = () => {
       };
       requestSignUp(data).then(res =>{
         const resData = res;
-        if(!resData || !resData.isSuccess || resData.message)
+        if(!resData || !resData.isSuccess || !resData.message)
         {
           Alert.alert('Error', resData.message);
           return null;

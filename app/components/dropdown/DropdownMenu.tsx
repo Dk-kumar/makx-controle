@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 
 interface DropdownMenuProps {
-  options: { label: string; route: string }[];
-  onSelect: (route: string) => void;
+  options: { label: string; route: string, isSignout ?: boolean }[];
+  onSelect ?: (route: string, isSignout?:boolean) => void;
   customStyle?: { dropdown?: object; dropdownItem?: object };
   onClose: () => void;
   anchorPosition?: { x: number; y: number; height: number };
@@ -67,7 +67,7 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = ({
             {
               top: adjustedPosition.y,
               left: adjustedPosition.x,
-              width: 200, // Fixed width; adjust as needed
+              width: 200,
             },
             customStyle?.dropdown,
           ]}
@@ -77,7 +77,7 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = ({
               key={index}
               onPress={() => {
                 onClose();
-                onSelect(option.route);
+                onSelect && onSelect(option?.route, option?.isSignout);
               }}
               style={[styles.dropdownItem, customStyle?.dropdownItem]}
             >

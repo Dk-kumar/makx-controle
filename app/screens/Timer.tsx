@@ -4,6 +4,7 @@ import { SettingIndicator } from "@/app/components/homeComponent";
 import detailsContext from "@/app/hooks/FirebaseContext";
 import useRefresh from '@/app/hooks/useRefresh';
 import { updateData } from '@/app/utils/service'
+import { usePageNameContext } from '@/app/index';
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 
 // Helper function for deep merging formData with motorData
@@ -84,9 +85,10 @@ const Timer = () => {
   const { motorData = {} } = useContext(detailsContext);
   const [isDirty, setIsDirty] = useState(false);
   const [formData, setFormData] = useState(() => initializeFormData(motorData));
+  const { userinfo } = usePageNameContext();
 
   const fetchData = async (): Promise<void> => {
-    console.log("refreshing and fetching data.....");
+    //console.log("refreshing and fetching data.....");
   };
   const { refreshing , onRefresh } = useRefresh(fetchData);
 
@@ -128,8 +130,11 @@ const Timer = () => {
 
   const handleSave = () => {
     const timerObj = {
-      motorId: "qJzAIcv03PyaWqxRgO4mSU3l",
-      timeinfo: formData,
+      userId: userinfo.userid,
+      motorId: userinfo.motorid,
+      data: {
+        timeinfo: formData
+      }
     };
 
     updateData(timerObj);

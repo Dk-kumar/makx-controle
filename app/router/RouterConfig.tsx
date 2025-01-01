@@ -27,7 +27,7 @@ const RouterConfig: React.FC<RouterConfigProps> = ({ initialRouteName }) =>{
               title: route?.title,
               headerShown: route?.headerShown,
               headerStyle:{
-                height: 95
+                height: 90
               },
               headerLeft: () => showBackButton(route?.showLeftButton ?? true),
               headerRight: () => <TopRightHeader />}}

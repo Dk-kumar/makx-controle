@@ -39,8 +39,8 @@ const SettingIndicator : React.FC <SettingIndicator> = ({ customStyleSetting, cu
   ];
 
   const dropDownPosition = {
-    x: 20,
-    y: 50,
+    x: 12,
+    y: 0,
     height: 90
   }
 
@@ -70,10 +70,9 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    // padding: 7,
-    // marginTop: 5,
     position: 'relative',
-    zIndex: 100
+    zIndex: 100,
+    paddingBottom: 5
   },
   iconContainer: {
     marginRight: 10,

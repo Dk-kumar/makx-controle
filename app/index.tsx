@@ -5,33 +5,14 @@ import RouterConfig from './router/RouterConfig';
 import { database } from '../config';
 import { ref, onValue } from 'firebase/database';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-interface UserInfo {
-  userid?: string;
-  motorid?: string;
-}
-
-interface UserData {
-  username: string;
-}
-
-interface MotorData {
-  phase?: string;
-  l1?: string;
-  l2?: string;
-  l3?: string;
-  a1?: string;
-  a2?: string;
-  "amps&volts"?: {
-    dryRun?: string;
-  };
-}
+import { UserInfo, UserData, MotorData, resetMotorData } from './IndexInterFace';
 
 interface UserContextType {
   userinfo: UserInfo;
   setUserInfo: (info: UserInfo) => void;
   userData: UserData;
   motorData: MotorData;
+  setMotorData : (info: MotorData) => void;
   removeSigninCredentials: () => Promise<void>;
 }
 
@@ -47,17 +28,25 @@ export const usePageNameContext = () => {
 
 export default function Index() {
   const [userinfo, setUserInfo] = useState<UserInfo>({});
-  const [userData, setUserData] = useState<UserData>({ username: '' });
-  const [motorData, setMotorData] = useState<MotorData>({
-    phase: '',
-    l1: '',
-    l2: '',
-    l3: '',
-    a1: '',
-    a2: '',
-  });
+  const [userData, setUserData] = useState<any>({ username: '', phonenumber:''});
+  const [motorData, setMotorData] = useState<MotorData>(resetMotorData);
   const [initialRoute, setInitialRoute] = useState('Signin');
   const [loading, setLoading] = useState(true);
+
+  const removeSigninCredentials = async () => {
+    try {
+      await AsyncStorage.removeItem('userInfoData');
+      console.log("Removed userInfoData from AsyncStorage.");
+  
+      setUserInfo({ userid: '', motorid: '' });
+      setUserData({ username: '', phonenumber: '', devices: [] });
+      setMotorData(resetMotorData);
+  
+      console.log("Reset local states.");
+    } catch (error) {
+      console.log('Error during sign out:', error);
+    }
+  };
 
   const contextValue = useMemo(
     () => ({
@@ -65,6 +54,7 @@ export default function Index() {
       setUserInfo,
       userData,
       motorData,
+      setMotorData,
       removeSigninCredentials,
     }),
     [userinfo, userData, motorData]
@@ -81,31 +71,12 @@ export default function Index() {
     }
   };
 
-  const removeSigninCredentials = async () => {
-    try {
-      await AsyncStorage.multiRemove(['userData', 'motorData']);
-      setUserInfo({});
-      setUserData({
-        username: '',
-      });
-      setMotorData({
-        phase: '',
-        l1: '',
-        l2: '',
-        l3: '',
-        a1: '',
-        a2: '',
-      });
-    } catch (error) {
-      console.error('Error during sign out:', error);
-    }
-  };
-
   useEffect(() => {
     const loadStoredData = async () => {
       try {
         const userInfoData = await AsyncStorage.getItem('userInfoData');
-        if (userInfoData) {
+        if(userInfoData){
+          console.log("initial rendering userInfoData:", userInfoData);
           setUserInfo(JSON.parse(userInfoData));
           setInitialRoute('Home');
         }
@@ -121,7 +92,7 @@ export default function Index() {
 
   useEffect(() => {
     const { userid, motorid } = userinfo;
-    if (!userid || !motorid) return;
+    if(!userid || !motorid) return;
 
     saveToStorageIfChanged('userInfoData', userinfo);
 
@@ -135,7 +106,22 @@ export default function Index() {
 
     const unsubscribeMotor = onValue(motorRef, async (snapshot) => {
       const updatedMotorData = snapshot.exists() ? snapshot.val() : {};
-      setMotorData(updatedMotorData);
+
+      const previousNotifications = motorData.notification || [];
+    
+      const notificationsUpdated = JSON.stringify(previousNotifications) !== JSON.stringify(updatedMotorData.notification);
+    
+      if (notificationsUpdated) {
+        let unReadMessageCount = motorData.unReadMessageCount;
+        unReadMessageCount = updatedMotorData.notification.length - motorData.unReadMessageCount;
+        
+        unReadMessageCount = unReadMessageCount >= 50 ? 50 : unReadMessageCount;
+        
+        updatedMotorData.unReadMessageCount = unReadMessageCount+1;
+      } else {
+        console.log("No changes in notifications.");
+      }
+      setMotorData((prevData) => ({ ...updatedMotorData }));
     });
 
     return () => {

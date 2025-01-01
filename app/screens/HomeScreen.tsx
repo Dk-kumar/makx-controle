@@ -2,28 +2,19 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet, Switch, TouchableOpacity } from 'react-native';
 import { ControlButtons, SettingIndicator } from '@/app/components/homeComponent';
 import { useSwitchRoute } from '@/app/components/navigation/useSwitchRoute';
-import ToggleSwitch from '@/app/components/button/ToggleSwitch';
+import { ToggleSwitch, ToggleChangeProps } from '@/app/components/button/ToggleSwitch';
 import CircularTimer from '@/app/components/button/CircularTimer';
+import { updateData } from "../utils/service";
 
 import { usePageNameContext } from '@/app/index';
 
 const HomeScreen = () => {
-  const [isEnabledCyclic, setIsEnabledCyclic] = useState(false);
-  const [isEnabledRun, setIsEnabledRun] = useState(false);
-  const [isEnabledDryRun, setIsEnabledDryRun] = useState(false);
-
-  const { userData, motorData } = usePageNameContext();
-  console.log(userData, motorData);
+  const { userData, motorData, userinfo } = usePageNameContext();
   const { setTitle } = useSwitchRoute();
   
   useEffect(() =>{
     setTitle(userData.username);
   }, [userData]);
-
-  const toggleCyclicSwitch = () => setIsEnabledCyclic(previousState => !previousState);
-  const toggleRunSwitch = () => setIsEnabledRun(previousState => !previousState);
-  const toggleDryRunSwitch = () => setIsEnabledDryRun(previousState => !previousState);
-
   if(!userData.username || !motorData)
   {
     return (
@@ -32,6 +23,21 @@ const HomeScreen = () => {
       </View>
     );
   }
+
+  const handleToggleChange = (event: ToggleChangeProps) => {
+    const { keyName, currentValue, isToggled } = event;
+    
+    updateData({
+      motorid: userinfo.motorid,
+      userid: userinfo.userid,
+      data: {
+        [keyName]: {
+          defaultValue: currentValue,
+          status: isToggled ? 'off' : 'on'
+        }
+      }
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -54,8 +60,20 @@ const HomeScreen = () => {
         </View>
 
           <View>
-            <ToggleSwitch option1="3 PH" option2="1/3 PH" defaultValue = {true}/>
-            <ToggleSwitch option1="AUTO" option2="MANUAL" defaultValue = {true} />
+            <ToggleSwitch
+              name="phasearms"
+              option1={motorData.phasearms.option1}
+              option2={motorData.phasearms.option2}
+              defaultValue = {motorData.phasearms.currentValue === "option1" ? true : false}
+              onChange={handleToggleChange}
+            />
+            <ToggleSwitch
+              name="phaseenabled"
+              option1={motorData.phaseenabled.option1}
+              option2={motorData.phaseenabled.option2}
+              defaultValue = {motorData.phaseenabled.currentValue === "option1" ? true : false}
+              onChange={handleToggleChange}
+            />
           </View>
         {/* </View> */}
       </View>
@@ -78,11 +96,11 @@ const HomeScreen = () => {
       </View>
 
       <View style={styles.statusRow}>
-        <View style={styles.statusBox}>
+        <View style={[styles.statusBox, styles.yelloColor]}>
           <Text style={styles.label}>A1</Text>
           <Text style={styles.value}>{motorData.a1}</Text>
         </View>
-        <View style={styles.statusBox}>
+        <View style={[styles.statusBox, styles.yelloColor]}>
           <Text style={styles.label}>A2</Text>
           <Text style={styles.value}>{motorData.a2}</Text>
         </View>
@@ -91,18 +109,40 @@ const HomeScreen = () => {
       {/* Timers Section */}
       <View style={styles.timerRow}>
         <View style={styles.timerBox}>
-          <Switch onValueChange={toggleCyclicSwitch} value={isEnabledCyclic} />
           <Text style={styles.timerText}>Cyclic Timer</Text>
+          <ToggleSwitch 
+            name="cyclictimer"
+            option1={motorData.cyclictimer.option1}
+            option2={motorData.cyclictimer.option2}
+            defaultValue = {motorData.cyclictimer.currentValue === "option1" ? false : true}
+            color1='#a6a6a6'
+            color2='green'
+            onChange={handleToggleChange}
+          />
         </View>
-
         <View style={styles.timerBox}>
-          <Switch onValueChange={toggleRunSwitch} value={isEnabledRun} />
           <Text style={styles.timerText}>Run Timer</Text>
+          <ToggleSwitch
+            name="runtimer"
+            option1={motorData.runtimer.option1}
+            option2={motorData.runtimer.option2}
+            defaultValue = {motorData.runtimer.currentValue === "option1" ? false : true}
+            color1='#a6a6a6'
+            color2='green'
+            onChange={handleToggleChange}
+          />
         </View>
-
         <View style={styles.timerBox}>
-          <Switch onValueChange={toggleDryRunSwitch} value={isEnabledDryRun} />
           <Text style={styles.timerText}>Dry Run Restart Timer</Text>
+          <ToggleSwitch
+            name="dryrunrestarttimer"
+            option1={motorData.dryrunrestarttimer.option1}
+            option2={motorData.dryrunrestarttimer.option2}
+            defaultValue = {motorData.dryrunrestarttimer.currentValue === "option1" ? false : true}
+            color1='#a6a6a6'
+            color2='green'
+            onChange={handleToggleChange}
+          />
         </View>
       </View>
 
@@ -123,13 +163,12 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: '2%',
     backgroundColor: '#fff',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
   },
   backArrow: {
     fontSize: 24,
@@ -139,82 +178,96 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-
+  yelloColor:{
+    backgroundColor: "#e68a00"
+  },
   topContainer: {
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    marginTop: 24, 
-    marginBottom: 40,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: "100%",
+    padding: '2%',
     alignItems: 'center',
   },
   
   phaseSection: {
     alignItems: 'center',
-    marginBottom: 20,
+    backgroundColor: '#00b3b3',
+    padding: '5%',
+    borderRadius: 5,
+    width: '30%',
   },
   phaseText: {
     fontSize: 18,
-    fontWeight: 'bold', 
+    color: '#ffffff',
+    fontWeight: 'bold',
   },
   phaseNumber: {
     fontSize: 32,
-    color: 'teal',
+    color: '#ffffff',
     fontWeight: 'bold',
   },
-  controlsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  controlText: {
-    fontSize: 16,
-    marginHorizontal: 10,
-  },
+  
   statusRow: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 20,
+    justifyContent: 'space-between',
+    paddingVertical: '2%',
+    flexWrap: 'wrap',
   },
+  
   statusBox: {
     alignItems: 'center',
-    padding: 10,
-    backgroundColor: '#e3e3e3',
-    borderRadius: 10,
+    padding: '5%',
+    flex: 1,
+    marginHorizontal: 5,
+    backgroundColor: '#3465c5',
+    color: "#ffffff",
+    borderRadius: 10
   },
   label: {
-    fontSize: 16,
+    fontSize: 18,
+    color: "#ffffff"
   },
   value: {
     fontSize: 24,
-    fontWeight: 'bold',
+    color: "#ffffff",
+    fontWeight: 'bold'
   },
   timerRow: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 20,
+    padding: 1,
+    justifyContent: 'space-between',
+    paddingVertical: '2%',
     flexWrap: 'wrap'
   },
   timerBox: {
     alignItems: 'center',
-    padding: 10,
+    flexGrow: 1,
+    borderRadius: 10,
+    height: 100,
+    width: "33.33%"
   },
+  
   timerText: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: 'bold',
+    textAlign: 'center',
+    height: "40%"
   },
-
   circularTimer: {
     flexDirection: 'row',
+    marginTop: -15,
     justifyContent: 'space-around',
-    marginVertical: 5,
   },
-
   footer: {
-    marginTop: 16,
-    paddingVertical: 20,
+    position: 'absolute',
+    left: '5%',
+    right: '5%',
+    bottom: '2%',
+    borderRadius: 10,
+    paddingVertical: '5%',
     backgroundColor: '#007bff',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   footerText: {
     fontSize: 18,

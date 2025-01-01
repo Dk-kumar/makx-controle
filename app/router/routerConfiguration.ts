@@ -8,7 +8,6 @@ import {
   AddDevice,
   Profile,
   About,
-  Signout,
   Signup,
   Signin 
 } from '../screens';
@@ -22,7 +21,6 @@ const routes = [
   { name: 'AddDevice', component: AddDevice, title: 'Add Device'},
   { name: 'Profile', component: Profile, title: 'Profile'},
   { name: 'About', component: About, title: 'About'},
-  { name: 'Signout', component: Signout, title: 'Signout'},
   { name: 'Signup', component: Signup, title: 'SignUp', headerShown: false, showLeftButton: false},
   { name: 'Signin', component: Signin, title: 'SignIn', headerShown: false, showLeftButton: false}
 ];

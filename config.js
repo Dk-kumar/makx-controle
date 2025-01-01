@@ -1,6 +1,7 @@
 
 import { initializeApp } from 'firebase/app';
 import { getDatabase } from 'firebase/database';
+// import messaging from '@react-native-firebase/messaging';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDewphss3NQ841rDIkacg2kXgITzInJN2A",
@@ -17,4 +18,4 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
 
-export { database };
+export { app, database};

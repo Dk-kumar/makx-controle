@@ -6,6 +6,5 @@ export { default as DeviceList } from './DeviceList';
 export { default as AddDevice } from './AddDevice';
 export { default as Profile } from './Profile';
 export { default as About } from './About';
-export { default as Signout } from './Signout';
 export { default as Signup } from './Signup';
 export { default as Signin } from './Signin';

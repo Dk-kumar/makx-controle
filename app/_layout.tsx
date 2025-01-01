@@ -1,9 +1,13 @@
-import { Stack } from "expo-router";
+import { registerRootComponent } from "expo";
+import Index from './index';
 
-export default function RootLayout(){
-  return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }}/>
-    </Stack>
-  );
-}
+registerRootComponent(Index);
+
+// export default function RootLayout(){
+//   console.error("helloWorld");
+//   return (
+//     <Stack>
+//       <Stack.Screen name="index" options={{ headerShown: false }}/>
+//     </Stack>
+//   );
+// }

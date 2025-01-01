@@ -38,7 +38,7 @@ export const requestSignUp = async (formData: object) =>{
     return await response.json();
   }
   catch(e){
-    console.log(e);
+    //console.log(e);
   }
 }
 
@@ -52,6 +52,6 @@ export const requestAddDevice = async (formData: object) =>{
     return await response.json();
   }
   catch(e){
-    console.log(e);
+    //console.log(e);
   }
 }

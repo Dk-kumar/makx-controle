@@ -4,14 +4,13 @@ import { InputBox } from '@/app/components/input/InputBox';
 import { Button } from '@/app/components/button/Button';
 import { requestAddDevice } from '@/app/utils/service';
 
-import detailsContext from '@/app/hooks/FirebaseContext';
+import { usePageNameContext } from '@/app/index';
 
 const AddDevice: React.FC = () => {
   const [deviceName, setDeviceName] = useState('');
   const [activationCode, setActivationCode] = useState('');
+  const { userData } = usePageNameContext();
   const [errors, setErrors] = useState({ deviceName: false, activationCode: false });
-
-  const { userData = {} } = useContext(detailsContext);
 
   const handleAddDevice = () => {
     const isDeviceNameValid = deviceName.trim() !== '';
@@ -28,8 +27,7 @@ const AddDevice: React.FC = () => {
         phonenumber: userData.phonenumber,
         deviceid: activationCode
       }
-      requestAddDevice(data).then(res =>{
-        const respData = JSON.parse(res.data);
+      requestAddDevice(data).then(respData =>{
         if(respData.isSuccess)
         {
           Alert.alert('Success', 'Device added successfully!');
@@ -39,6 +37,7 @@ const AddDevice: React.FC = () => {
           Alert.alert('Error', 'Motor Id is invalid, kindly check again');
         }
       }).catch(error =>{
+        console.log(error);
         Alert.alert('Error', 'Something went wrong, please try again after some time');
       });
     }
