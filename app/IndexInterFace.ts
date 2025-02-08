@@ -66,6 +66,57 @@ export interface MotorData {
       toggle?: boolean;
     };
   };
+  "timeinfo": {
+    "A Time": number;
+    "SDL": number;
+    "EXT": number;
+    "Cycle Time": {
+      "On Time": number;
+      "Off Time": number;
+      "Present": number;
+      toggle?: boolean;
+    };
+    "Run Time":{
+      Set: number;
+      Present: number;
+      toggle?: boolean;
+    };
+    "Dry Run Time":{
+      Set: number;
+      Present: number;
+      toggle?: boolean;
+    };
+    clocks:{
+      "Clock 1": {
+        "On Time": number;
+        "Off Time": number;
+        toggle?: boolean;
+      };
+      "Clock 2": {
+        "On Time": number;
+        "Off Time": number;
+        toggle?: boolean;
+      };
+      "Clock 3": {
+        "On Time": number;
+        "Off Time": number;
+        toggle?: boolean;
+      };
+      "Clock 4": {
+        "On Time": number;
+        "Off Time": number;
+        toggle?: boolean;
+      };
+      "Clock 5": {
+        "On Time": number;
+        "Off Time": number;
+        toggle?: boolean;
+      };
+    };
+    "Repeat Clock":{
+      toggle?: boolean;
+    };
+  };
 }
 
 export const resetMotorData: MotorData = {
@@ -111,6 +162,57 @@ export const resetMotorData: MotorData = {
       "Trip Time": 0,
       "SPP Volt": { value: "0", unit: "V" },
       toggle: false,
+    }
+  },
+  "timeinfo": {
+    "A Time": 0,
+    "SDL": 0,
+    "EXT": 0,
+    "Cycle Time": {
+      "On Time": 0,
+      "Off Time": 0,
+      "Present": 0,
+      toggle: false
+    },
+    "Run Time":{
+      Set: 0,
+      Present: 0,
+      toggle: false
+    },
+    "Dry Run Time":{
+      Set: 0,
+      Present: 0,
+      toggle: false
+    },
+    clocks:{
+      "Clock 1": {
+        "On Time": 0,
+        "Off Time": 0,
+        toggle: false
+      },
+      "Clock 2": {
+        "On Time": 0,
+        "Off Time": 0,
+        toggle: false
+      },
+      "Clock 3": {
+        "On Time": 0,
+        "Off Time": 0,
+        toggle: false
+      },
+      "Clock 4": {
+        "On Time": 0,
+        "Off Time": 0,
+        toggle: false,
+      },
+      "Clock 5": {
+        "On Time": 0,
+        "Off Time": 0,
+        toggle: false
+      },
+    },
+    "Repeat Clock":{
+      toggle: false
     }
   }
 };

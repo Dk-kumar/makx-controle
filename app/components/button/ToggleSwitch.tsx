@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TouchableOpacity, Text, StyleSheet, Animated, View, LayoutChangeEvent } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, Animated, LayoutChangeEvent } from 'react-native';
 
 export interface ToggleChangeProps {
   keyName: string,

@@ -45,7 +45,7 @@ const Notification: React.FC = () => {
                   : styles.read,
               ]}
             >
-              <Text style={styles.message}>{item.message}</Text>
+              <Text style={styles.message}>{Object.keys(item.message)}</Text>
               <Text style={styles.time}>{item.time}</Text>
             </View>
           </TouchableOpacity>
