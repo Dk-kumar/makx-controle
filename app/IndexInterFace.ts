@@ -22,6 +22,7 @@ export interface UserInfo {
   }
   
 export interface MotorData {
+  status: boolean;
   phase?: string;
   l1?: string;
   l2?: string;
@@ -120,6 +121,7 @@ export interface MotorData {
 }
 
 export const resetMotorData: MotorData = {
+  status: false,
   phase: '',
   l1: '',
   l2: '',

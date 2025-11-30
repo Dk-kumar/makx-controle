@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "makx-controle",
-    "displayName": "makx-controle",
-    "slug": "makx-controle",
+    "name": "Agrotech",
+    "displayName": "Agrotech",
+    "slug": "Agrotech",
     "scheme": "motot-app",
     "version": "1.0.0",
     "platforms": [
@@ -18,9 +18,13 @@
       "bundleIdentifier": "com.muralimohan.makxcontrole"
     },
     "orientation": "portrait",
-    "icon": "/Users/murali-15351/makx-controle/app/images/appLogo.png",
+    "icon": "/Users/murali-15351/makx-controle/app/images/appLogo.jpeg",
+    "adaptiveIcon": {
+      "foregroundImage": "/Users/murali-15351/makx-controle/app/images/appLogo.jpeg",
+      "backgroundColor": "#ffffff"
+    },
     "splash": {
-      "image": "/Users/murali-15351/makx-controle/app/images/appLogo.png",
+      "image": "/Users/murali-15351/makx-controle/app/images/appLogo.jpeg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

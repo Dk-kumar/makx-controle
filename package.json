@@ -1,5 +1,5 @@
 {
-  "name": "makx-controle",
+  "name": "agrotech-controle",
   "main": "./app/_layout.tsx",
   "version": "1.0.0",
   "scripts": {
@@ -19,6 +19,7 @@
     "@react-native-async-storage/async-storage": "1.23.1",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/stack": "^6.4.1",
+    "axios": "^1.13.2",
     "date-fns": "^3.6.0",
     "expo": "^52.0.0",
     "expo-constants": "~17.0.3",

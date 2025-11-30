@@ -25,6 +25,7 @@ const Signup: React.FC = () => {
         email: email,
         activationcode: activationCode
       };
+      
       requestSignUp(data).then(res =>{
         const resData = res;
         if(!resData || !resData.isSuccess || !resData.message)
@@ -33,8 +34,8 @@ const Signup: React.FC = () => {
           return null;
         }
 
-        Alert.alert('Success', 'Account created successfully! kindly login now...');
-        return switchRoute("Signin");
+        Alert.alert('Success', 'OTP Sended successfully! kindly validate and login now...');
+        return switchRoute("OTPValidation", {email: data.email, phone_number: data.phonenumber});
 
       }).catch(error =>{
         Alert.alert('Error', 'Something went wrong, please try again later');

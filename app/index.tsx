@@ -81,7 +81,7 @@ export default function Index() {
           setInitialRoute('Home');
         }
         setLoading(false);
-      } catch (error) {
+      } catch(error) {
         console.error('Error loading stored data:', error);
         setLoading(false);
       }
@@ -95,6 +95,7 @@ export default function Index() {
     if(!userid || !motorid) return;
 
     saveToStorageIfChanged('userInfoData', userinfo);
+    console.log(userid, motorid);
 
     const userRef = ref(database, `users/${userid}`);
     const motorRef = ref(database, `motors/${motorid}`);

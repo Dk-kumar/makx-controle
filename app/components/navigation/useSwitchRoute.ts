@@ -2,20 +2,18 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from './HookStackParamList';
 
-type NavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
-
 export const useSwitchRoute = () => {
-    const navigation = useNavigation<NavigationProp>();
+    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   
-    const switchRoute = (route : string = "Home") => {
-      navigation.navigate(route);
+    const switchRoute = (route : string = "Home", params?: object) => {
+      navigation.navigate(route, params as any);
     };
 
     const switchBack = () => {
       if(navigation.canGoBack()){
         navigation.goBack();
       }else{
-        switchRoute();
+        switchRoute("Home");
       }
     }
     

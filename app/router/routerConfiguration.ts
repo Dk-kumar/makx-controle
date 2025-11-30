@@ -9,7 +9,8 @@ import {
   Profile,
   About,
   Signup,
-  Signin 
+  Signin,
+  OTPValidation
 } from '../screens';
 
 const routes = [
@@ -22,6 +23,7 @@ const routes = [
   { name: 'Profile', component: Profile, title: 'Profile'},
   { name: 'About', component: About, title: 'About'},
   { name: 'Signup', component: Signup, title: 'SignUp', headerShown: false, showLeftButton: false},
+  { name: 'OTPValidation', component: OTPValidation, title : 'OTPValidation', headerShown: false, showLeftButton: false},
   { name: 'Signin', component: Signin, title: 'SignIn', headerShown: false, showLeftButton: false}
 ];
 
